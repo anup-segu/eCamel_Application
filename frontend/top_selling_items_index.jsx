@@ -7,6 +7,7 @@ var TopSellingItemsIndex = React.createClass({
     console.log(this.props.top_selling);
     return (
       <div>
+        Top Selling Items
         <ul>
         { 
           this.props.top_selling.map(function(item){

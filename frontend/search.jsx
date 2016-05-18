@@ -3,23 +3,16 @@ var ReactDOM = require('react-dom');
 var $ = require('jquery');
 var PopularItemsIndex = require('./popular_items_index');
 var CompletedSalesIndex = require('./completed_sales_index');
-<<<<<<< HEAD
 var TopSellingItemsIndex = require('./top_selling_items_index');
-=======
 var ProductSearchIndex = require('./product_search_index');
->>>>>>> 2989bf840e0c029a5697a70500240f9425f046d0
 
 var Search = React.createClass({
   getInitialState: function(){
     return({
       top_selling: [],
       popular_items: [],
-<<<<<<< HEAD
-      completed_sales: null
-=======
       completed_sales: null,
       product_searches: null,
->>>>>>> 2989bf840e0c029a5697a70500240f9425f046d0
     });
   },
 
@@ -90,11 +83,8 @@ var Search = React.createClass({
         </form>
         <PopularItemsIndex popular_items={this.state.popular_items} />
         <CompletedSalesIndex data={this.state.completed_sales} />
-<<<<<<< HEAD
         <TopSellingItemsIndex top_selling={this.state.top_selling} />
-=======
         <ProductSearchIndex data={this.state.product_searches} />
->>>>>>> 2989bf840e0c029a5697a70500240f9425f046d0
       </div>
     );
   }
