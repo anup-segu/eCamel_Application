@@ -1,5 +1,8 @@
 @import url("./product_search.css");
 
+html {
+  font-family: 'Palanquin', sans-serif !important;
+}
 
 .clearfix:after {
    visibility: hidden;
