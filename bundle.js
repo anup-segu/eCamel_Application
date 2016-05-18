@@ -20173,29 +20173,31 @@
 	var $ = __webpack_require__(169);
 	var PopularItemsIndex = __webpack_require__(170);
 	var CompletedSalesIndex = __webpack_require__(171);
+	var TopSellingItemsIndex = __webpack_require__(172);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
 	
 	  getInitialState: function getInitialState() {
 	    return {
+	      top_selling: [],
 	      popular_items: [],
 	      completed_sales: null
 	    };
 	  },
 	
-	  handlePopularItems: function handlePopularItems(e) {
+	  requestData: function requestData(e) {
 	    e.preventDefault();
 	    var input = e.target.elements[0].value;
 	    if (input.length == 0) {
-	      var url = 'http://ecamel.herokuapp.com/api/popular_items';
+	      var popular_items_url = 'http://ecamel.herokuapp.com/api/popular_items';
 	    } else {
-	      var url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
+	      var popular_items_url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
 	      var completed_sales_url = 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + input;
 	    }
 	
 	    $.ajax({
-	      url: url,
+	      url: popular_items_url,
 	      method: 'GET',
 	      dataType: 'json',
 	      success: function (data) {
@@ -20215,18 +20217,36 @@
 	    }
 	  },
 	
+	  requestTopSelling: function requestTopSelling(e) {
+	    e.preventDefault();
+	    $.ajax({
+	      url: 'http://ecamel.herokuapp.com/api/top_selling_items',
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function (data) {
+	        this.setState({ top_selling: data });
+	      }.bind(this)
+	    });
+	  },
+	
 	  render: function render() {
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'form',
-	        { onSubmit: this.handlePopularItems },
+	        { onSubmit: this.requestData },
 	        React.createElement('input', { placeholder: 'find Popular' }),
 	        React.createElement('input', { type: 'submit' })
 	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.requestTopSelling },
+	        React.createElement('input', { type: 'submit', value: 'find Top Selling' })
+	      ),
 	      React.createElement(PopularItemsIndex, { popular_items: this.state.popular_items }),
-	      React.createElement(CompletedSalesIndex, { data: this.state.completed_sales })
+	      React.createElement(CompletedSalesIndex, { data: this.state.completed_sales }),
+	      React.createElement(TopSellingItemsIndex, { top_selling: this.state.top_selling })
 	    );
 	  }
 	
@@ -30253,6 +30273,66 @@
 	});
 	
 	module.exports = CompletedSalesIndex;
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(33);
+	
+	var TopSellingItemsIndex = React.createClass({
+	  displayName: 'TopSellingItemsIndex',
+	
+	
+	  render: function render() {
+	    console.log(this.props.top_selling);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'ul',
+	        null,
+	        this.props.top_selling.map(function (item) {
+	          return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	              'li',
+	              null,
+	              item.search.title
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              React.createElement(
+	                'a',
+	                { href: item.search.productURL },
+	                'Link'
+	              )
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              'Min Price: $',
+	              item.search.priceRangeMax.__value__
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              'Max Price: $',
+	              item.search.priceRangeMin.__value__
+	            )
+	          );
+	        }.bind(this))
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = TopSellingItemsIndex;
 
 /***/ }
 /******/ ]);
