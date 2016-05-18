@@ -12,33 +12,54 @@ var CompletedSalesIndex = React.createClass({
     this.setState({ data: newProps.data });
   },
 
+  currencyFormat: function (num) {
+    return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  },
+
+  createStats: function() {
+    var categories = Object.keys(this.state.data["categories"]);
+    var categoryID = categories[0];
+    var stats = this.state.data["categories"][categoryID]["statistics"];
+
+    return (
+      <div>
+        <h4>Average Selling Price: {this.currencyFormat(Number(stats["average"]))}</h4>
+        <h4>Highest Selling Price: {this.currencyFormat(Number(stats["max"]))}</h4>
+        <h4>Lowest Selling Price Price: {this.currencyFormat(Number(stats["min"]))}</h4>
+      </div>
+    );
+  },
+
   createList: function() {
     var categories = Object.keys(this.state.data["categories"]);
     var categoryID = categories[0];
-    var items = this.state.data["categories"]["items"];
+    var items = this.state.data["categories"][categoryID]["items"];
 
     var itemsContent = items.map(function (item) {
       return (
         <li key={item["id"]}>
           <a href={item["url"]}>{item["title"]}</a>
-          <p>Sales Price: {item["price"]}</p>
+          <p>Sales Price: {this.currencyFormat(Number(item["price"]))}</p>
           <p>Ended on: {item["end_time"].slice(0,10)}</p>
         </li>
       );
-    });
+    }.bind(this));
 
     return (
       <ul>
         { itemsContent }
       </ul>
     );
-
   },
 
   render: function() {
     if (this.state.data) {
       return (
-        this.createList()
+        <div>
+          <h2>Recently Completed Sales</h2>
+          {this.createStats()}
+          {this.createList()}
+        </div>
       );
     } else {
       return <div />;

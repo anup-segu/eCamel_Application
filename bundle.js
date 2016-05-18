@@ -20178,7 +20178,10 @@
 	  displayName: 'Search',
 	
 	  getInitialState: function getInitialState() {
-	    return { popular_items: [] };
+	    return {
+	      popular_items: [],
+	      completed_sales: null
+	    };
 	  },
 	
 	  handlePopularItems: function handlePopularItems(e) {
@@ -20188,6 +20191,7 @@
 	      var url = 'http://ecamel.herokuapp.com/api/popular_items';
 	    } else {
 	      var url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
+	      var completed_sales_url = 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + input;
 	    }
 	
 	    $.ajax({
@@ -20198,10 +20202,21 @@
 	        this.setState({ popular_items: data });
 	      }.bind(this)
 	    });
+	
+	    if (completed_sales_url) {
+	      $.ajax({
+	        url: completed_sales_url,
+	        method: 'GET',
+	        dataType: 'json',
+	        success: function (data) {
+	          this.setState({ completed_sales: data });
+	        }.bind(this)
+	      });
+	    }
 	  },
 	
 	  render: function render() {
-	    console.log(this.state.popular_items);
+	    // console.log(this.state.completed_sales);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -20210,7 +20225,8 @@
 	        { onSubmit: this.handlePopularItems },
 	        React.createElement('input', { placeholder: 'find Popular' }),
 	        React.createElement('input', { type: 'submit' })
-	      )
+	      ),
+	      React.createElement(CompletedSalesIndex, { data: this.state.completed_sales })
 	    );
 	  }
 	
@@ -30112,10 +30128,43 @@
 	    this.setState({ data: newProps.data });
 	  },
 	
+	  currencyFormat: function currencyFormat(num) {
+	    return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	  },
+	
+	  createStats: function createStats() {
+	    var categories = Object.keys(this.state.data["categories"]);
+	    var categoryID = categories[0];
+	    var stats = this.state.data["categories"][categoryID]["statistics"];
+	
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "h4",
+	        null,
+	        "Average Selling Price: ",
+	        this.currencyFormat(Number(stats["average"]))
+	      ),
+	      React.createElement(
+	        "h4",
+	        null,
+	        "Highest Selling Price: ",
+	        this.currencyFormat(Number(stats["max"]))
+	      ),
+	      React.createElement(
+	        "h4",
+	        null,
+	        "Lowest Selling Price Price: ",
+	        this.currencyFormat(Number(stats["min"]))
+	      )
+	    );
+	  },
+	
 	  createList: function createList() {
 	    var categories = Object.keys(this.state.data["categories"]);
 	    var categoryID = categories[0];
-	    var items = this.state.data["categories"]["items"];
+	    var items = this.state.data["categories"][categoryID]["items"];
 	
 	    var itemsContent = items.map(function (item) {
 	      return React.createElement(
@@ -30130,7 +30179,7 @@
 	          "p",
 	          null,
 	          "Sales Price: ",
-	          item["price"]
+	          this.currencyFormat(Number(item["price"]))
 	        ),
 	        React.createElement(
 	          "p",
@@ -30139,7 +30188,7 @@
 	          item["end_time"].slice(0, 10)
 	        )
 	      );
-	    });
+	    }.bind(this));
 	
 	    return React.createElement(
 	      "ul",
@@ -30150,7 +30199,17 @@
 	
 	  render: function render() {
 	    if (this.state.data) {
-	      return this.createList();
+	      return React.createElement(
+	        "div",
+	        null,
+	        React.createElement(
+	          "h2",
+	          null,
+	          "Recently Completed Sales"
+	        ),
+	        this.createStats(),
+	        this.createList()
+	      );
 	    } else {
 	      return React.createElement("div", null);
 	    }

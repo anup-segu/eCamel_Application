@@ -6,7 +6,10 @@ var CompletedSalesIndex = require('./completed_sales_index');
 
 var Search = React.createClass({
   getInitialState: function(){
-    return({popular_items: []});
+    return({
+      popular_items: [],
+      completed_sales: null,
+    });
   },
 
   handlePopularItems: function(e){
@@ -16,6 +19,7 @@ var Search = React.createClass({
       var url = 'http://ecamel.herokuapp.com/api/popular_items';
     } else {
       var url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
+      var completed_sales_url = 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + input;
     }
 
     $.ajax({
@@ -26,16 +30,28 @@ var Search = React.createClass({
         this.setState({popular_items: data});
       }.bind(this)
     });
+
+    if (completed_sales_url) {
+      $.ajax({
+        url: completed_sales_url,
+        method: 'GET',
+        dataType: 'json',
+        success: function(data){
+          this.setState({completed_sales: data});
+        }.bind(this)
+      });
+    }
   },
 
   render: function(){
-    console.log(this.state.popular_items);
+    // console.log(this.state.completed_sales);
     return (
       <div>
         <form onSubmit={this.handlePopularItems}>
           <input placeholder='find Popular'/>
           <input type='submit' />
         </form>
+        <CompletedSalesIndex data={this.state.completed_sales} />
       </div>
     );
   }
