@@ -25,18 +25,22 @@ var ProductSearchResults = React.createClass({
       var priceFormatted = this.currencyFormat(Number(price));
 
       return (
-        <li key={item["itemId"][0]}>
-          <div className="clearfix">
-            <img className="product_search_image" src={item["galleryURL"][0]} />
-            <a href={ebayLink}>{item["title"][0]}</a>
-            <p>Selling Price: {priceFormatted}</p>
+        <li key={item["itemId"][0]} className="product_search_result">
+          <div className="clearfix product_search_pane">
+            <div className="product_search_image">
+              <img src={item["galleryURL"][0]} />
+            </div>
+            <div className="product_search_result_content">
+              <a href={ebayLink}>{item["title"][0]}</a>
+              <p>Selling Price: {priceFormatted}</p>
+            </div>
           </div>
         </li>
       );
     }.bind(this));
 
     return (
-      <ul>
+      <ul className="product_search_index">
         {itemsContent}
       </ul>
     );

@@ -30305,21 +30305,29 @@
 	
 	      return React.createElement(
 	        "li",
-	        { key: item["itemId"][0] },
+	        { key: item["itemId"][0], className: "product_search_result" },
 	        React.createElement(
 	          "div",
-	          { className: "clearfix" },
-	          React.createElement("img", { className: "product_search_image", src: item["galleryURL"][0] }),
+	          { className: "clearfix product_search_pane" },
 	          React.createElement(
-	            "a",
-	            { href: ebayLink },
-	            item["title"][0]
+	            "div",
+	            { className: "product_search_image" },
+	            React.createElement("img", { src: item["galleryURL"][0] })
 	          ),
 	          React.createElement(
-	            "p",
-	            null,
-	            "Selling Price: ",
-	            priceFormatted
+	            "div",
+	            { className: "product_search_result_content" },
+	            React.createElement(
+	              "a",
+	              { href: ebayLink },
+	              item["title"][0]
+	            ),
+	            React.createElement(
+	              "p",
+	              null,
+	              "Selling Price: ",
+	              priceFormatted
+	            )
 	          )
 	        )
 	      );
@@ -30327,7 +30335,7 @@
 	
 	    return React.createElement(
 	      "ul",
-	      null,
+	      { className: "product_search_index" },
 	      itemsContent
 	    );
 	  },
