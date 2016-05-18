@@ -48,7 +48,7 @@
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(33);
-	var PopularItems = __webpack_require__(172);
+	var Search = __webpack_require__(168);
 	
 	var MyComponent = React.createClass({
 	  displayName: 'MyComponent',
@@ -62,7 +62,7 @@
 	        null,
 	        'Hello World'
 	      ),
-	      React.createElement(PopularItems, null)
+	      React.createElement(Search, null)
 	    );
 	  }
 	});
@@ -20163,7 +20163,78 @@
 	module.exports = ReactMount.renderSubtreeIntoContainer;
 
 /***/ },
-/* 168 */,
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(33);
+	var $ = __webpack_require__(169);
+	var PopularItemsIndex = __webpack_require__(170);
+	var CompletedSalesIndex = __webpack_require__(171);
+	
+	var Search = React.createClass({
+	  displayName: 'Search',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      popular_items: [],
+	      completed_sales: null
+	    };
+	  },
+	
+	  handlePopularItems: function handlePopularItems(e) {
+	    e.preventDefault();
+	    var input = e.target.elements[0].value;
+	    if (input.length == 0) {
+	      var url = 'http://ecamel.herokuapp.com/api/popular_items';
+	    } else {
+	      var url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
+	      var completed_sales_url = 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + input;
+	    }
+	
+	    $.ajax({
+	      url: url,
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function (data) {
+	        this.setState({ popular_items: data });
+	      }.bind(this)
+	    });
+	
+	    if (completed_sales_url) {
+	      $.ajax({
+	        url: completed_sales_url,
+	        method: 'GET',
+	        dataType: 'json',
+	        success: function (data) {
+	          this.setState({ completed_sales: data });
+	        }.bind(this)
+	      });
+	    }
+	  },
+	
+	  render: function render() {
+	    // console.log(this.state.completed_sales);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handlePopularItems },
+	        React.createElement('input', { placeholder: 'find Popular' }),
+	        React.createElement('input', { type: 'submit' })
+	      ),
+	      React.createElement(CompletedSalesIndex, { data: this.state.completed_sales })
+	    );
+	  }
+	
+	});
+	
+	module.exports = Search;
+
+/***/ },
 /* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -30024,48 +30095,129 @@
 	  displayName: 'PopularItemsIndex',
 	
 	
-	  render: function render() {}
+	  render: function render() {
+	    React.createElement(
+	      'div',
+	      null,
+	      'Hi'
+	    );
+	  }
 	});
 	
 	module.exports = PopularItemsIndex;
 
 /***/ },
-/* 171 */,
-/* 172 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(33);
-	var $ = __webpack_require__(169);
-	var PopularItemsIndex = __webpack_require__(170);
+	var PropTypes = React.PropTypes;
 	
-	var PopularItems = React.createClass({
-	  displayName: 'PopularItems',
+	var CompletedSalesIndex = React.createClass({
+	  displayName: "CompletedSalesIndex",
 	
-	
-	  handleEnterSubmit: function handleEnterSubmit(e) {
-	    if (e.nativeEvent.keyCode != 13) return;
-	    $.ajax({
-	      url: 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + e.currentTarget.value,
-	      method: 'GET',
-	      dataType: 'json',
-	      success: function success(data) {
-	        debugger;
-	      }
-	    });
+	  getInitialState: function getInitialState() {
+	    return {
+	      data: null
+	    };
 	  },
 	
-	  handleButtonSubmit: function handleButtonSubmit() {},
+	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	    this.setState({ data: newProps.data });
+	  },
+	
+	  currencyFormat: function currencyFormat(num) {
+	    return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	  },
+	
+	  createStats: function createStats() {
+	    var categories = Object.keys(this.state.data["categories"]);
+	    var categoryID = categories[0];
+	    var stats = this.state.data["categories"][categoryID]["statistics"];
+	
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "h4",
+	        null,
+	        "Average Selling Price: ",
+	        this.currencyFormat(Number(stats["average"]))
+	      ),
+	      React.createElement(
+	        "h4",
+	        null,
+	        "Highest Selling Price: ",
+	        this.currencyFormat(Number(stats["max"]))
+	      ),
+	      React.createElement(
+	        "h4",
+	        null,
+	        "Lowest Selling Price Price: ",
+	        this.currencyFormat(Number(stats["min"]))
+	      )
+	    );
+	  },
+	
+	  createList: function createList() {
+	    var categories = Object.keys(this.state.data["categories"]);
+	    var categoryID = categories[0];
+	    var items = this.state.data["categories"][categoryID]["items"];
+	
+	    var itemsContent = items.map(function (item) {
+	      return React.createElement(
+	        "li",
+	        { key: item["id"] },
+	        React.createElement(
+	          "a",
+	          { href: item["url"] },
+	          item["title"]
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          "Sales Price: ",
+	          this.currencyFormat(Number(item["price"]))
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          "Ended on: ",
+	          item["end_time"].slice(0, 10)
+	        )
+	      );
+	    }.bind(this));
+	
+	    return React.createElement(
+	      "ul",
+	      null,
+	      itemsContent
+	    );
+	  },
 	
 	  render: function render() {
-	    return React.createElement('input', { placeholder: 'find Popular', onKeyPress: this.handleEnterSubmit });
+	    if (this.state.data) {
+	      return React.createElement(
+	        "div",
+	        null,
+	        React.createElement(
+	          "h2",
+	          null,
+	          "Recently Completed Sales"
+	        ),
+	        this.createStats(),
+	        this.createList()
+	      );
+	    } else {
+	      return React.createElement("div", null);
+	    }
 	  }
 	
 	});
 	
-	module.exports = PopularItems;
+	module.exports = CompletedSalesIndex;
 
 /***/ }
 /******/ ]);
