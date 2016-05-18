@@ -48,7 +48,7 @@
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(33);
-	var PopularItems = __webpack_require__(168);
+	var Search = __webpack_require__(168);
 	
 	var MyComponent = React.createClass({
 	  displayName: 'MyComponent',
@@ -62,7 +62,7 @@
 	        null,
 	        'Hello World'
 	      ),
-	      React.createElement(PopularItems, null)
+	      React.createElement(Search, null)
 	    );
 	  }
 	});
@@ -20172,19 +20172,35 @@
 	var ReactDOM = __webpack_require__(33);
 	var $ = __webpack_require__(169);
 	var PopularItemsIndex = __webpack_require__(170);
+	var CompletedSalesIndex = __webpack_require__(171);
 	
 	var PopularItems = React.createClass({
 	  displayName: 'PopularItems',
 	
+	  getInitialState: function getInitialState() {
+	    return { popular_items: null, completed_sales: null };
+	  },
 	
 	  handleEnterSubmit: function handleEnterSubmit(e) {
-	    if (e.nativeEvent.keyCode != 13) return;
+	    // if (e.nativeEvent.keyCode != 13) return;
+	    e.preventDefault();
 	    $.ajax({
-	      url: 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + e.currentTarget.value,
+	      url: 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + e.target.elements[0].value,
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function success(data) {
+	        this.setState({ popular_items: data });
+	      }
+	    });
+	
+	    $.ajax({
+	      url: 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + e.target.elements[0].value,
 	      method: 'GET',
 	      dataType: 'json',
 	      success: function success(data) {
 	        debugger;
+	        this.setState({ completed_sales: data });
+	        console.log(data);
 	      }
 	    });
 	  },
@@ -20192,7 +20208,17 @@
 	  handleButtonSubmit: function handleButtonSubmit() {},
 	
 	  render: function render() {
-	    return React.createElement('input', { placeholder: 'find Popular', onKeyPress: this.handleEnterSubmit });
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleEnterSubmit },
+	        React.createElement('input', { placeholder: 'search items' }),
+	        React.createElement('input', { type: 'submit', value: 'Search' })
+	      ),
+	      React.createElement(CompletedSalesIndex, { data: this.state.completed_sales })
+	    );
 	  }
 	
 	});
@@ -30064,6 +30090,76 @@
 	});
 	
 	module.exports = PopularItemsIndex;
+
+/***/ },
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var CompletedSalesIndex = React.createClass({
+	  displayName: "CompletedSalesIndex",
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      data: null
+	    };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	    this.setState({ data: newProps.data });
+	  },
+	
+	  createList: function createList() {
+	    var categories = Object.keys(this.state.data["categories"]);
+	    var categoryID = categories[0];
+	    var items = this.state.data["categories"]["items"];
+	
+	    var itemsContent = items.map(function (item) {
+	      return React.createElement(
+	        "li",
+	        { key: item["id"] },
+	        React.createElement(
+	          "a",
+	          { href: item["url"] },
+	          item["title"]
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          "Sales Price: ",
+	          item["price"]
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          "Ended on: ",
+	          item["end_time"].slice(0, 10)
+	        )
+	      );
+	    });
+	
+	    return React.createElement(
+	      "ul",
+	      null,
+	      itemsContent
+	    );
+	  },
+	
+	  render: function render() {
+	    if (this.state.data) {
+	      return this.createList();
+	    } else {
+	      return React.createElement("div", null);
+	    }
+	  }
+	
+	});
+	
+	module.exports = CompletedSalesIndex;
 
 /***/ }
 /******/ ]);

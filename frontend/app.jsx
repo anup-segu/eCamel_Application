@@ -1,13 +1,13 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var PopularItems = require('./popular_items');
+var Search = require('./search');
 
 var MyComponent = React.createClass({
   render: function () {
     return(
       <div>
         <div>Hello World</div>
-        <PopularItems />
+        <Search />
       </div>
     );
   }

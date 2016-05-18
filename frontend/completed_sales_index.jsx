@@ -17,7 +17,7 @@ var CompletedSalesIndex = React.createClass({
     var categoryID = categories[0];
     var items = this.state.data["categories"]["items"];
 
-    var items_content = items.map(function (item) {
+    var itemsContent = items.map(function (item) {
       return (
         <li key={item["id"]}>
           <a href={item["url"]}>{item["title"]}</a>
@@ -29,17 +29,16 @@ var CompletedSalesIndex = React.createClass({
 
     return (
       <ul>
-        { items_content }
+        { itemsContent }
       </ul>
     );
 
   },
 
-
   render: function() {
     if (this.state.data) {
       return (
-        this.createList();
+        this.createList()
       );
     } else {
       return <div />;
