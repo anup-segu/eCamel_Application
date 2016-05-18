@@ -44,7 +44,6 @@ var Search = React.createClass({
   },
 
   render: function(){
-    // console.log(this.state.completed_sales);
     return (
       <div>
         <form onSubmit={this.handlePopularItems}>

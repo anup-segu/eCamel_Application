@@ -20216,7 +20216,6 @@
 	  },
 	
 	  render: function render() {
-	    // console.log(this.state.completed_sales);
 	    return React.createElement(
 	      'div',
 	      null,
