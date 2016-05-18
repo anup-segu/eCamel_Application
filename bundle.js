@@ -20174,56 +20174,49 @@
 	var PopularItemsIndex = __webpack_require__(170);
 	var CompletedSalesIndex = __webpack_require__(171);
 	
-	var PopularItems = React.createClass({
-	  displayName: 'PopularItems',
+	var Search = React.createClass({
+	  displayName: 'Search',
 	
 	  getInitialState: function getInitialState() {
-	    return { popular_items: null, completed_sales: null };
+	    return { popular_items: [] };
 	  },
 	
-	  handleEnterSubmit: function handleEnterSubmit(e) {
-	    // if (e.nativeEvent.keyCode != 13) return;
+	  handlePopularItems: function handlePopularItems(e) {
 	    e.preventDefault();
-	    $.ajax({
-	      url: 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + e.target.elements[0].value,
-	      method: 'GET',
-	      dataType: 'json',
-	      success: function success(data) {
-	        this.setState({ popular_items: data });
-	      }
-	    });
+	    var input = e.target.elements[0].value;
+	    if (input.length == 0) {
+	      var url = 'http://ecamel.herokuapp.com/api/popular_items';
+	    } else {
+	      var url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
+	    }
 	
 	    $.ajax({
-	      url: 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + e.target.elements[0].value,
+	      url: url,
 	      method: 'GET',
 	      dataType: 'json',
-	      success: function success(data) {
-	        debugger;
-	        this.setState({ completed_sales: data });
-	        console.log(data);
-	      }
+	      success: function (data) {
+	        this.setState({ popular_items: data });
+	      }.bind(this)
 	    });
 	  },
-	
-	  handleButtonSubmit: function handleButtonSubmit() {},
 	
 	  render: function render() {
+	    console.log(this.state.popular_items);
 	    return React.createElement(
 	      'div',
 	      null,
 	      React.createElement(
 	        'form',
-	        { onSubmit: this.handleEnterSubmit },
-	        React.createElement('input', { placeholder: 'search items' }),
-	        React.createElement('input', { type: 'submit', value: 'Search' })
-	      ),
-	      React.createElement(CompletedSalesIndex, { data: this.state.completed_sales })
+	        { onSubmit: this.handlePopularItems },
+	        React.createElement('input', { placeholder: 'find Popular' }),
+	        React.createElement('input', { type: 'submit' })
+	      )
 	    );
 	  }
 	
 	});
 	
-	module.exports = PopularItems;
+	module.exports = Search;
 
 /***/ },
 /* 169 */
@@ -30086,7 +30079,13 @@
 	  displayName: 'PopularItemsIndex',
 	
 	
-	  render: function render() {}
+	  render: function render() {
+	    React.createElement(
+	      'div',
+	      null,
+	      'Hi'
+	    );
+	  }
 	});
 	
 	module.exports = PopularItemsIndex;

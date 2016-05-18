@@ -4,51 +4,42 @@ var $ = require('jquery');
 var PopularItemsIndex = require('./popular_items_index');
 var CompletedSalesIndex = require('./completed_sales_index');
 
-var PopularItems = React.createClass({
-  getInitialState: function() {
-    return { popular_items: null, completed_sales: null };
+var Search = React.createClass({
+  getInitialState: function(){
+    return({popular_items: []});
   },
 
-  handleEnterSubmit: function(e) {
-    // if (e.nativeEvent.keyCode != 13) return;
+  handlePopularItems: function(e){
     e.preventDefault();
+    var input = e.target.elements[0].value;
+    if (input.length == 0){
+      var url = 'http://ecamel.herokuapp.com/api/popular_items';
+    } else {
+      var url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
+    }
+
     $.ajax({
-      url: 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + e.target.elements[0].value,
+      url: url,
       method: 'GET',
       dataType: 'json',
       success: function(data){
-        this.setState({ popular_items: data });
-      }
+        this.setState({popular_items: data});
+      }.bind(this)
     });
-
-    $.ajax({
-      url: 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + e.target.elements[0].value,
-      method: 'GET',
-      dataType: 'json',
-      success: function(data){
-        debugger;
-        this.setState({ completed_sales: data });
-        console.log(data);
-      }
-    });
-  },
-
-  handleButtonSubmit: function(){
-
   },
 
   render: function(){
+    console.log(this.state.popular_items);
     return (
       <div>
-        <form onSubmit={this.handleEnterSubmit}>
-          <input placeholder='search items' />
-          <input type="submit" value="Search" />
+        <form onSubmit={this.handlePopularItems}>
+          <input placeholder='find Popular'/>
+          <input type='submit' />
         </form>
-        <CompletedSalesIndex data={this.state.completed_sales} />
       </div>
     );
   }
 
 });
 
-module.exports = PopularItems;
+module.exports = Search;
