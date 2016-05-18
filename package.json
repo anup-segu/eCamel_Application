@@ -1,0 +1,17 @@
+{
+  "name": "app_eCamel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2",
+    "webpack": "^1.13.0"
+  }
+}
