@@ -20173,6 +20173,7 @@
 	var $ = __webpack_require__(169);
 	var PopularItemsIndex = __webpack_require__(170);
 	var CompletedSalesIndex = __webpack_require__(171);
+	var ProductSearchIndex = __webpack_require__(172);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -20180,7 +20181,8 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      popular_items: [],
-	      completed_sales: null
+	      completed_sales: null,
+	      product_searches: null
 	    };
 	  },
 	
@@ -20192,6 +20194,7 @@
 	    } else {
 	      var url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
 	      var completed_sales_url = 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + input;
+	      var product_searches_url = 'http://ecamel.herokuapp.com/api/product_search?keywords=' + input;
 	    }
 	
 	    $.ajax({
@@ -20213,6 +20216,17 @@
 	        }.bind(this)
 	      });
 	    }
+	
+	    if (product_searches_url) {
+	      $.ajax({
+	        url: product_searches_url,
+	        method: 'GET',
+	        dataType: 'json',
+	        success: function (data) {
+	          this.setState({ product_searches: data });
+	        }.bind(this)
+	      });
+	    }
 	  },
 	
 	  render: function render() {
@@ -20226,7 +20240,8 @@
 	        React.createElement('input', { type: 'submit' })
 	      ),
 	      React.createElement(PopularItemsIndex, { popular_items: this.state.popular_items }),
-	      React.createElement(CompletedSalesIndex, { data: this.state.completed_sales })
+	      React.createElement(CompletedSalesIndex, { data: this.state.completed_sales }),
+	      React.createElement(ProductSearchIndex, { data: this.state.product_searches })
 	    );
 	  }
 	
@@ -30253,6 +30268,90 @@
 	});
 	
 	module.exports = CompletedSalesIndex;
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var ProductSearchResults = React.createClass({
+	  displayName: "ProductSearchResults",
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      data: null
+	    };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+	    this.setState({ data: newProps.data });
+	  },
+	
+	  currencyFormat: function currencyFormat(num) {
+	    return "$" + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+	  },
+	
+	  createList: function createList() {
+	    var items = this.state.data["item"];
+	
+	    var itemsContent = items.map(function (item) {
+	      var ebayLink = item["viewItemURL"][0];
+	      var price = item["sellingStatus"][0]["currentPrice"][0]["__value__"];
+	      var priceFormatted = this.currencyFormat(Number(price));
+	
+	      return React.createElement(
+	        "li",
+	        { key: item["itemId"][0] },
+	        React.createElement(
+	          "div",
+	          { className: "clearfix" },
+	          React.createElement("img", { className: "product_search_image", src: item["galleryURL"][0] }),
+	          React.createElement(
+	            "a",
+	            { href: ebayLink },
+	            item["title"][0]
+	          ),
+	          React.createElement(
+	            "p",
+	            null,
+	            "Selling Price: ",
+	            priceFormatted
+	          )
+	        )
+	      );
+	    }.bind(this));
+	
+	    return React.createElement(
+	      "ul",
+	      null,
+	      itemsContent
+	    );
+	  },
+	
+	  render: function render() {
+	    if (this.state.data) {
+	      return React.createElement(
+	        "div",
+	        null,
+	        React.createElement(
+	          "h2",
+	          null,
+	          "Product Search Results"
+	        ),
+	        this.createList()
+	      );
+	    } else {
+	      return React.createElement("div", null);
+	    }
+	  }
+	
+	});
+	
+	module.exports = ProductSearchResults;
 
 /***/ }
 /******/ ]);
