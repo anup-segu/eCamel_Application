@@ -1,10 +1,14 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var PopularItems = require('./popular_items');
 
 var MyComponent = React.createClass({
   render: function () {
     return(
-      <div>Hello World</div>
+      <div>
+        <div>Hello World</div>
+        <PopularItems />
+      </div>
     );
   }
 });
