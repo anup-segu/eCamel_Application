@@ -48,7 +48,7 @@
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(33);
-	var PopularItems = __webpack_require__(168);
+	var Search = __webpack_require__(171);
 	
 	var MyComponent = React.createClass({
 	  displayName: 'MyComponent',
@@ -62,7 +62,7 @@
 	        null,
 	        'Hello World'
 	      ),
-	      React.createElement(PopularItems, null)
+	      React.createElement(Search, null)
 	    );
 	  }
 	});
@@ -20163,43 +20163,7 @@
 	module.exports = ReactMount.renderSubtreeIntoContainer;
 
 /***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(33);
-	var $ = __webpack_require__(170);
-	var PopularItemsIndex = __webpack_require__(169);
-	
-	var PopularItems = React.createClass({
-	  displayName: 'PopularItems',
-	
-	
-	  handleEnterSubmit: function handleEnterSubmit(e) {
-	    if (e.nativeEvent.keyCode != 13) return;
-	    $.ajax({
-	      url: 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + e.currentTarget.value,
-	      method: 'GET',
-	      dataType: 'json',
-	      success: function success(data) {
-	        debugger;
-	      }
-	    });
-	  },
-	
-	  handleButtonSubmit: function handleButtonSubmit() {},
-	
-	  render: function render() {
-	    return React.createElement('input', { placeholder: 'find Popular', onKeyPress: this.handleEnterSubmit });
-	  }
-	
-	});
-	
-	module.exports = PopularItems;
-
-/***/ },
+/* 168 */,
 /* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -20212,7 +20176,13 @@
 	  displayName: 'PopularItemsIndex',
 	
 	
-	  render: function render() {}
+	  render: function render() {
+	    React.createElement(
+	      'div',
+	      null,
+	      'Hi'
+	    );
+	  }
 	});
 	
 	module.exports = PopularItemsIndex;
@@ -30064,6 +30034,62 @@
 	return jQuery;
 	}));
 
+
+/***/ },
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(33);
+	var $ = __webpack_require__(170);
+	var PopularItemsIndex = __webpack_require__(169);
+	
+	var Search = React.createClass({
+	  displayName: 'Search',
+	
+	  getInitialState: function getInitialState() {
+	    return { popular_items: [] };
+	  },
+	
+	  handlePopularItems: function handlePopularItems(e) {
+	    e.preventDefault();
+	    var input = e.target.elements[0].value;
+	    if (input.length == 0) {
+	      var url = 'http://ecamel.herokuapp.com/api/popular_items';
+	    } else {
+	      var url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
+	    }
+	
+	    $.ajax({
+	      url: url,
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function (data) {
+	        debugger;
+	        this.setState({ popular_items: data });
+	      }.bind(this)
+	    });
+	  },
+	
+	  render: function render() {
+	    console.log(this.state.popular_items);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handlePopularItems },
+	        React.createElement('input', { placeholder: 'find Popular' }),
+	        React.createElement('input', { type: 'submit' })
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Search;
 
 /***/ }
 /******/ ]);
