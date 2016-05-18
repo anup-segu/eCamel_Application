@@ -3,14 +3,23 @@ var ReactDOM = require('react-dom');
 var $ = require('jquery');
 var PopularItemsIndex = require('./popular_items_index');
 var CompletedSalesIndex = require('./completed_sales_index');
+<<<<<<< HEAD
 var TopSellingItemsIndex = require('./top_selling_items_index');
+=======
+var ProductSearchIndex = require('./product_search_index');
+>>>>>>> 2989bf840e0c029a5697a70500240f9425f046d0
 
 var Search = React.createClass({
   getInitialState: function(){
     return({
       top_selling: [],
       popular_items: [],
+<<<<<<< HEAD
       completed_sales: null
+=======
+      completed_sales: null,
+      product_searches: null,
+>>>>>>> 2989bf840e0c029a5697a70500240f9425f046d0
     });
   },
 
@@ -22,6 +31,7 @@ var Search = React.createClass({
     } else {
       var popular_items_url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
       var completed_sales_url = 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + input;
+      var product_searches_url = 'http://ecamel.herokuapp.com/api/product_search?keywords=' + input;
     }
 
     $.ajax({
@@ -40,6 +50,17 @@ var Search = React.createClass({
         dataType: 'json',
         success: function(data){
           this.setState({completed_sales: data});
+        }.bind(this)
+      });
+    }
+
+    if (product_searches_url) {
+      $.ajax({
+        url: product_searches_url,
+        method: 'GET',
+        dataType: 'json',
+        success: function(data){
+          this.setState({product_searches: data});
         }.bind(this)
       });
     }
@@ -69,7 +90,11 @@ var Search = React.createClass({
         </form>
         <PopularItemsIndex popular_items={this.state.popular_items} />
         <CompletedSalesIndex data={this.state.completed_sales} />
+<<<<<<< HEAD
         <TopSellingItemsIndex top_selling={this.state.top_selling} />
+=======
+        <ProductSearchIndex data={this.state.product_searches} />
+>>>>>>> 2989bf840e0c029a5697a70500240f9425f046d0
       </div>
     );
   }
