@@ -1,0 +1,31 @@
+.product_search_index {
+  padding: 0;
+}
+
+.product_search_image {
+  float: left;
+  width: 150px;
+}
+
+.product_search_image > img {
+  display: block;
+  margin: auto;
+}
+
+.product_search_pane {
+  padding: 10px;
+}
+
+.product_search_result {
+  list-style: none;
+  margin-bottom: 15px;
+
+  -webkit-box-shadow: 4px 5px 18px -1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 4px 5px 18px -1px rgba(0,0,0,0.75);
+  box-shadow: 4px 5px 18px -1px rgba(0,0,0,0.75);
+}
+
+.product_search_result_content {
+  float: left;
+  margin-left: 15px;
+}
