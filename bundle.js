@@ -20194,14 +20194,13 @@
 	      method: 'GET',
 	      dataType: 'json',
 	      success: function (data) {
-	        debugger;
 	        this.setState({ popular_items: data });
 	      }.bind(this)
 	    });
 	  },
 	
 	  render: function render() {
-	    console.log(this.state.popular_items);
+	
 	    return React.createElement(
 	      'div',
 	      null,
@@ -20210,7 +20209,8 @@
 	        { onSubmit: this.handlePopularItems },
 	        React.createElement('input', { placeholder: 'find Popular' }),
 	        React.createElement('input', { type: 'submit' })
-	      )
+	      ),
+	      React.createElement(PopularItemsIndex, { popular_items: this.state.popular_items })
 	    );
 	  }
 	
@@ -30080,10 +30080,45 @@
 	
 	
 	  render: function render() {
-	    React.createElement(
+	    return React.createElement(
 	      'div',
 	      null,
-	      'Hi'
+	      React.createElement(
+	        'ul',
+	        null,
+	        this.props.popular_items.map(function (item) {
+	          return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	              'li',
+	              null,
+	              item.title
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              React.createElement(
+	                'a',
+	                { href: item.url },
+	                'Link'
+	              )
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              'Current Price: $',
+	              item.current_price
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              'Watch Count: ',
+	              item.watch_count
+	            )
+	          );
+	        }.bind(this))
+	      )
 	    );
 	  }
 	});

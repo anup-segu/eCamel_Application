@@ -22,20 +22,20 @@ var Search = React.createClass({
       method: 'GET',
       dataType: 'json',
       success: function(data){
-        debugger
         this.setState({popular_items: data});
       }.bind(this)
     })
   },
 
   render: function(){
-    console.log(this.state.popular_items);
+
     return (
       <div>
         <form onSubmit={this.handlePopularItems}>
           <input placeholder='find Popular'/> 
           <input type='submit' />
         </form>
+        <PopularItemsIndex popular_items={this.state.popular_items} />
       </div>
     );
   }
