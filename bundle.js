@@ -48,7 +48,7 @@
 	
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(33);
-	var PopularItems = __webpack_require__(168);
+	var PopularItems = __webpack_require__(172);
 	
 	var MyComponent = React.createClass({
 	  displayName: 'MyComponent',
@@ -20163,43 +20163,7 @@
 	module.exports = ReactMount.renderSubtreeIntoContainer;
 
 /***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(33);
-	var $ = __webpack_require__(169);
-	var PopularItemsIndex = __webpack_require__(170);
-	
-	var PopularItems = React.createClass({
-	  displayName: 'PopularItems',
-	
-	
-	  handleEnterSubmit: function handleEnterSubmit(e) {
-	    if (e.nativeEvent.keyCode != 13) return;
-	    $.ajax({
-	      url: 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + e.currentTarget.value,
-	      method: 'GET',
-	      dataType: 'json',
-	      success: function success(data) {
-	        debugger;
-	      }
-	    });
-	  },
-	
-	  handleButtonSubmit: function handleButtonSubmit() {},
-	
-	  render: function render() {
-	    return React.createElement('input', { placeholder: 'find Popular', onKeyPress: this.handleEnterSubmit });
-	  }
-	
-	});
-	
-	module.exports = PopularItems;
-
-/***/ },
+/* 168 */,
 /* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -30064,6 +30028,44 @@
 	});
 	
 	module.exports = PopularItemsIndex;
+
+/***/ },
+/* 171 */,
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(33);
+	var $ = __webpack_require__(169);
+	var PopularItemsIndex = __webpack_require__(170);
+	
+	var PopularItems = React.createClass({
+	  displayName: 'PopularItems',
+	
+	
+	  handleEnterSubmit: function handleEnterSubmit(e) {
+	    if (e.nativeEvent.keyCode != 13) return;
+	    $.ajax({
+	      url: 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + e.currentTarget.value,
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function success(data) {
+	        debugger;
+	      }
+	    });
+	  },
+	
+	  handleButtonSubmit: function handleButtonSubmit() {},
+	
+	  render: function render() {
+	    return React.createElement('input', { placeholder: 'find Popular', onKeyPress: this.handleEnterSubmit });
+	  }
+	
+	});
+	
+	module.exports = PopularItems;
 
 /***/ }
 /******/ ]);
