@@ -21,11 +21,11 @@ var Search = React.createClass({
     e.preventDefault();
     var input = e.target.elements[0].value;
     if (input.length == 0){
-      var popular_items_url = 'http://ecamel.herokuapp.com/api/popular_items';
+      var popular_items_url = '//ecamel.herokuapp.com/api/popular_items';
     } else {
-      var popular_items_url = 'http://ecamel.herokuapp.com/api/popular_items?keyword=' + input;
-      var completed_sales_url = 'http://ecamel.herokuapp.com/api/completed_sale?keywords=' + input;
-      var product_searches_url = 'http://ecamel.herokuapp.com/api/product_search?keywords=' + input;
+      var popular_items_url = '//ecamel.herokuapp.com/api/popular_items?keyword=' + input;
+      var completed_sales_url = '//ecamel.herokuapp.com/api/completed_sale?keywords=' + input;
+      var product_searches_url = '//ecamel.herokuapp.com/api/product_search?keywords=' + input;
     }
 
     $.ajax({
@@ -63,7 +63,7 @@ var Search = React.createClass({
   requestTopSelling: function(e){
     e.preventDefault();
     $.ajax({
-      url: 'http://ecamel.herokuapp.com/api/top_selling_items',
+      url: '//ecamel.herokuapp.com/api/top_selling_items',
       method: 'GET',
       dataType: 'json',
       success: function(data){
