@@ -6,7 +6,6 @@ var PopularItemsIndex = React.createClass({
   render: function(){
     return (
       <div>
-        Popular Items
         <ul>
         { 
           this.props.popular_items.map(function(item){

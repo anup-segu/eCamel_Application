@@ -13,6 +13,7 @@ var Search = React.createClass({
       popular_items: [],
       completed_sales: null,
       product_searches: null,
+      selected: null
     });
   },
 
@@ -71,20 +72,50 @@ var Search = React.createClass({
     })
   },
 
+  generateCategory: function(){
+    if (this.state.selected == 'popular') {
+      return (
+        <PopularItemsIndex popular_items={this.state.popular_items} />
+      )
+    } else if (this.state.selected == 'product') {
+      return (
+        <ProductSearchIndex data={this.state.product_searches} />
+      )
+    } else if (this.state.selected == 'completed') {
+      return (
+        <CompletedSalesIndex data={this.state.completed_sales} />
+      )
+    } else {
+      return (
+        <div>
+          <PopularItemsIndex popular_items={this.state.popular_items} />
+          <CompletedSalesIndex data={this.state.completed_sales} />
+          <ProductSearchIndex data={this.state.product_searches} />
+        </div>
+      )
+    }
+  },
+
   render: function(){
+    var category = this.generateCategory();
     return (
       <div>
-        <form onSubmit={this.requestData}>
-          <input placeholder='find Popular'/>
-          <input type='submit' />
+      <ul className="nav navbar-nav">
+        <li className="active" onClick={this.setState({selected: 'popular'})}><a href="#">Popular Items</a></li>
+        <li onClick={this.setState({selected: 'product'})}><a href="#">Product Search</a></li>
+        <li onClick={this.setState({selected: 'completed'})}><a href="#">Completed Sales</a></li>
+      </ul>
+        <form className='navbar-form navbar-left' onSubmit={this.requestData}>
+          <div className='form-group'>
+            <input className='form-control' placeholder='Search'/>&nbsp;
+            <input className="btn btn-default" type='submit' />
+          </div>
         </form>
-        <form onSubmit={this.requestTopSelling}>
-          <input type='submit' value='find Top Selling'/>
+        <form className='navbar-form navbar-left' onSubmit={this.requestTopSelling}>
+          <input className='btn btn-default' type='submit' value='find Top Selling'/>
         </form>
-        <PopularItemsIndex popular_items={this.state.popular_items} />
-        <CompletedSalesIndex data={this.state.completed_sales} />
         <TopSellingItemsIndex top_selling={this.state.top_selling} />
-        <ProductSearchIndex data={this.state.product_searches} />
+        {category}
       </div>
     );
   }

@@ -4,10 +4,8 @@ var ReactDOM = require('react-dom');
 var TopSellingItemsIndex = React.createClass({
 
   render: function(){
-    console.log(this.props.top_selling);
     return (
       <div>
-        Top Selling Items
         <ul>
         { 
           this.props.top_selling.map(function(item){

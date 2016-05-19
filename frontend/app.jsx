@@ -6,7 +6,6 @@ var MyComponent = React.createClass({
   render: function () {
     return(
       <div>
-        <div>Hello World</div>
         <Search />
       </div>
     );
