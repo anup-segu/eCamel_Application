@@ -96,15 +96,27 @@ var Search = React.createClass({
     }
   },
 
+  handlePopular: function(e){
+    this.setState({selected: 'popular'});
+  },
+
+  handleProduct: function(e){
+    this.setState({selected: 'product'})
+  },
+
+  handleCompleted: function(e){
+    this.setState({selected: 'completed'})
+  },
+
   render: function(){
     var category = this.generateCategory();
     return (
       <div>
-      <ul className="nav navbar-nav">
-        <li className="active" onClick={this.setState({selected: 'popular'})}><a href="#">Popular Items</a></li>
-        <li onClick={this.setState({selected: 'product'})}><a href="#">Product Search</a></li>
-        <li onClick={this.setState({selected: 'completed'})}><a href="#">Completed Sales</a></li>
-      </ul>
+        <ul className="nav navbar-nav">
+          <li className="active" onClick={this.handlePopular}><a href="#">Popular Items</a></li>
+          <li onClick={this.handleProduct}><a href="#">Product Search</a></li>
+          <li onClick={this.handleCompleted}><a href="#">Completed Sales</a></li>
+        </ul>
         <form className='navbar-form navbar-left' onSubmit={this.requestData}>
           <div className='form-group'>
             <input className='form-control' placeholder='Search'/>&nbsp;
@@ -114,6 +126,7 @@ var Search = React.createClass({
         <form className='navbar-form navbar-left' onSubmit={this.requestTopSelling}>
           <input className='btn btn-default' type='submit' value='find Top Selling'/>
         </form>
+        <br /><br /> <br />
         <TopSellingItemsIndex top_selling={this.state.top_selling} />
         {category}
       </div>

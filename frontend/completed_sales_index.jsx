@@ -26,6 +26,7 @@ var CompletedSalesIndex = React.createClass({
         <h4>Average Selling Price: {this.currencyFormat(Number(stats["average"]))}</h4>
         <h4>Highest Selling Price: {this.currencyFormat(Number(stats["max"]))}</h4>
         <h4>Lowest Selling Price Price: {this.currencyFormat(Number(stats["min"]))}</h4>
+        <br/>
       </div>
     );
   },
@@ -37,16 +38,20 @@ var CompletedSalesIndex = React.createClass({
 
     var itemsContent = items.map(function (item) {
       return (
-        <li key={item["id"]}>
-          <a href={item["url"]}>{item["title"]}</a>
-          <p>Sales Price: {this.currencyFormat(Number(item["price"]))}</p>
-          <p>Ended on: {item["end_time"].slice(0,10)}</p>
+        <li className="product_search_result" key={item["id"]}>
+          <div className="clearfix product_search_pane">
+            <div className="product_search_result_content">
+              <p><a href={item["url"]}>{item["title"]}</a></p>
+              <p>Sales Price: {this.currencyFormat(Number(item["price"]))}</p>
+              <p>Ended on: {item["end_time"].slice(0,10)}</p>
+            </div>
+          </div>
         </li>
       );
     }.bind(this));
 
     return (
-      <ul>
+      <ul className="product_search_index">
         { itemsContent }
       </ul>
     );
