@@ -1,1 +1,1 @@
-web: open index.html
+web: node bundle.js
